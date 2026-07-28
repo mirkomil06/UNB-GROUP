@@ -109,12 +109,33 @@
     }
   }
 
+  let savedScrollY = 0;
+
+  // Plain `overflow:hidden` on body doesn't reliably block background
+  // scroll on iOS Safari — pinning the body with `position:fixed` and
+  // restoring the scroll offset on close is the standard iOS-safe lock.
+  function lockScroll(){
+    savedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+  }
+
+  function unlockScroll(){
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, savedScrollY);
+  }
+
   function openModal(slug){
     currentProduct = slug;
     modalOpen = true;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    lockScroll();
     loadPresentation(slug);
   }
 
@@ -123,7 +144,7 @@
     currentProduct = null;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    unlockScroll();
     modalFrame.src = 'about:blank';
   }
 

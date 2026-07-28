@@ -19,7 +19,8 @@
 }
 
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+html,body{overflow-x:hidden;max-width:100%;}
 body{
   margin:0;
   background:var(--paper);
@@ -36,6 +37,10 @@ h1,h2,h3{font-family:var(--font-display);margin:0;font-weight:600;letter-spacing
 p{margin:0;}
 
 .section__inner{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+
+@media (max-width:480px){
+  .section__inner{padding:0 18px;}
+}
 
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
@@ -77,7 +82,7 @@ p{margin:0;}
   max-width:var(--maxw);margin:0 auto;padding:14px 32px;
   display:flex;align-items:center;justify-content:space-between;gap:24px;
 }
-.nav__logo{height:28px;width:auto;}
+.nav__logo{height:38px;width:auto;}
 .nav__links{display:flex;gap:28px;font-size:14px;font-weight:500;}
 .nav__links a{color:var(--ink-soft);transition:color .15s;}
 .nav__links a:hover{color:var(--blueprint);}
@@ -85,8 +90,9 @@ p{margin:0;}
 .nav__phone{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);}
 .lang-switch{display:flex;border:1px solid var(--line-strong);border-radius:4px;overflow:hidden;font-family:var(--font-mono);font-size:12px;}
 .lang-btn{
-  background:none;border:none;padding:5px 9px;cursor:pointer;color:var(--ink-soft);
+  background:none;border:none;padding:8px 10px;cursor:pointer;color:var(--ink-soft);
   border-right:1px solid var(--line-strong);font-family:var(--font-mono);
+  min-height:34px;
 }
 .lang-btn:last-child{border-right:none;}
 .lang-btn.is-active{background:var(--blueprint);color:var(--white);}
@@ -94,6 +100,12 @@ p{margin:0;}
 @media (max-width:860px){
   .nav__links{display:none;}
   .nav__phone{display:none;}
+}
+
+@media (max-width:480px){
+  .nav__inner{padding:10px 16px;gap:12px;}
+  .nav__logo{height:30px;}
+  .lang-btn{padding:7px 8px;font-size:11px;}
 }
 
 /* ---------- Buttons ---------- */
@@ -139,6 +151,13 @@ p{margin:0;}
 @media (max-width:900px){
   .hero__inner{grid-template-columns:1fr;padding:56px 24px;}
   .hero__visual{order:-1;max-width:340px;margin:0 auto;}
+}
+
+@media (max-width:480px){
+  .hero__inner{padding:40px 18px 44px;}
+  .hero__subhead{font-size:16px;}
+  .hero__actions{flex-direction:column;align-items:stretch;}
+  .hero__actions .btn{width:100%;}
 }
 
 /* ---------- Transition ---------- */
@@ -225,6 +244,9 @@ p{margin:0;}
 @media (max-width:600px){
   .direction-grid{grid-template-columns:1fr;}
 }
+@media (max-width:480px){
+  .direction-card{padding:22px 18px;}
+}
 
 /* ---------- Effect ---------- */
 .effect{background:var(--ink);color:var(--white);padding:88px 0;}
@@ -252,10 +274,15 @@ p{margin:0;}
   border-radius:3px;padding:2px 6px;
 }
 
+@media (max-width:480px){
+  .pres__buttons{flex-direction:column;align-items:stretch;}
+  .pres__btn{justify-content:center;}
+}
+
 /* ---------- Footer ---------- */
 .footer{background:var(--paper-2);padding-top:64px;}
 .footer__inner{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:48px;}
-.footer__logo{height:30px;margin-bottom:16px;}
+.footer__logo{height:40px;margin-bottom:16px;}
 .footer__brand p{color:var(--ink-soft);font-size:14px;max-width:280px;}
 .footer__contacts{font-size:14px;}
 .footer__label{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-top:14px;letter-spacing:0.04em;}
@@ -292,7 +319,7 @@ p{margin:0;}
   box-shadow:0 24px 64px rgba(0,0,0,0.35);
   transform:translateY(12px);transition:transform .2s ease;
 }
-.pres-modal.is-open .pres-modal__panel{transform:translateY(0);}
+.pres-modal.is-open .pres-modal__panel{transform:none;}
 .pres-modal__bar{
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   padding:12px 18px;border-bottom:1px solid var(--line);background:var(--ink);color:var(--paper);
@@ -324,4 +351,13 @@ p{margin:0;}
 @media (max-width:700px){
   .pres-modal{padding:0;}
   .pres-modal__panel{max-width:none;width:100%;height:100%;max-height:none;border-radius:0;}
+}
+
+/* ---------- Small-phone tightening ---------- */
+@media (max-width:480px){
+  .transition,
+  .platform,
+  .directions,
+  .effect,
+  .presentations{padding:48px 0;}
 }
