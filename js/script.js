@@ -83,6 +83,29 @@
     return `assets/presentations/products/${slug}-${lang}.pdf`;
   }
 
+  // Touch-primary devices (phones, tablets) get a direct download instead of
+  // the in-page preview — iframe-embedded PDF viewers are inconsistent on
+  // mobile browsers. Laptops/desktops (fine pointer: mouse or trackpad) keep
+  // the modal preview.
+  function isTouchDevice(){
+    return window.matchMedia('(pointer: coarse)').matches;
+  }
+
+  function resolveDeckUrl(slug, lang){
+    if(AVAILABLE_DECKS.has(`${slug}-${lang}`)) return pdfUrl(slug, lang);
+    if(AVAILABLE_DECKS.has(`${slug}-ru`)) return pdfUrl(slug, 'ru');
+    return null;
+  }
+
+  function downloadDeck(url){
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
   function showFrame(url){
     modalFallback.hidden = true;
     modalFrame.hidden = false;
@@ -97,16 +120,8 @@
 
   function loadPresentation(slug){
     modalLabel.textContent = 'VIEWING · ' + (PRODUCT_LABELS[slug] || (slug.toUpperCase() + ' DECK'));
-
-    const lang = currentLang;
-
-    if(AVAILABLE_DECKS.has(`${slug}-${lang}`)){
-      showFrame(pdfUrl(slug, lang));
-    } else if(AVAILABLE_DECKS.has(`${slug}-ru`)){
-      showFrame(pdfUrl(slug, 'ru'));
-    } else {
-      showFallback();
-    }
+    const url = resolveDeckUrl(slug, currentLang);
+    if(url){ showFrame(url); } else { showFallback(); }
   }
 
   let savedScrollY = 0;
@@ -148,14 +163,23 @@
     modalFrame.src = 'about:blank';
   }
 
+  function openCard(slug){
+    const url = resolveDeckUrl(slug, currentLang);
+    if(url && isTouchDevice()){
+      downloadDeck(url);
+      return;
+    }
+    openModal(slug);
+  }
+
   document.querySelectorAll('.direction-card[data-product]').forEach(card=>{
     card.setAttribute('tabindex', '0');
     card.setAttribute('role', 'button');
-    card.addEventListener('click', ()=> openModal(card.getAttribute('data-product')));
+    card.addEventListener('click', ()=> openCard(card.getAttribute('data-product')));
     card.addEventListener('keydown', (e)=>{
       if(e.key === 'Enter' || e.key === ' '){
         e.preventDefault();
-        openModal(card.getAttribute('data-product'));
+        openCard(card.getAttribute('data-product'));
       }
     });
   });
